@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/user"
+    },
+    {
+      "path": "./blog-e2e"
+    },
+    {
+      "path": "./blog"
+    },
+    {
+      "path": "./notify-e2e"
+    },
+    {
+      "path": "./notify"
+    },
+    {
+      "path": "./api-gateway-e2e"
+    },
+    {
+      "path": "./api-gateway"
+    },
+    {
+      "path": "./apps/comment-e2e"
+    },
+    {
+      "path": "./apps/comment"
+    }
+  ]
+}
