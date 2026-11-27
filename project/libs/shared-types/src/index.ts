@@ -1,5 +1,5 @@
 export type { Comment } from './lib/comment.interface.js';
-export type { EmailDigest } from './lib/email-digest.interface.js';
+export type { EmailMailing } from './lib/email-mailing.interface.js';
 export type { Like } from './lib/like.interface.js';
 export type {
   LinkPost,

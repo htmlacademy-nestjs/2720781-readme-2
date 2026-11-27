@@ -75,7 +75,8 @@
     "@nestjs/jwt": "^11.0.2",
     "axios": "^1.6.0",
     "class-validator": "^0.15.1",
-    "class-transformer": "^0.5.1"
+    "class-transformer": "^0.5.1",
+    "@nestjs/microservices": "11.2.7"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.0"

@@ -22,6 +22,22 @@ export class UserRepository {
     return user ? this.toEntity(user) : null;
   }
 
+  async findMailingUsers(request: { after?: string; limit: number }) {
+    const users = await this.users
+      .find({
+        ...(request.after ? { _id: { $gt: request.after } } : {}),
+      })
+      .select({ _id: 1, email: 1 })
+      .sort({ _id: 1 })
+      .limit(request.limit)
+      .lean()
+      .exec();
+    return users.map((user) => ({
+      id: user._id.toString(),
+      email: user.email,
+    }));
+  }
+
   async create(input: NewUser) {
     await this.users.init();
     try {

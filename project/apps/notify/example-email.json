@@ -1,0 +1,6 @@
+{
+  "notificationId": "a9e52e5b-2f29-4806-a4ad-40120e9196aa",
+  "recipientEmail": "reader@example.com",
+  "subject": "Новые публикации",
+  "text": "В блоге появились новые публикации."
+}

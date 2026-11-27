@@ -1,27 +1,35 @@
 Локальный запуск
 
-Перед первым запуском создайте `apps/user/.env`, `apps/blog/.env` и `apps/comment/.env` из шаблонов. Их используют Nest и Prisma. Передача `.env.example` в Docker Compose настраивает только контейнеры. Существующие `.env` команда ниже сохраняет.
+Перед первым запуском создайте `apps/user/.env`, `apps/blog/.env`, `apps/comment/.env` и `apps/notify/.env` из шаблонов. Их используют Nest и Prisma. Передача `.env.example` в Docker Compose настраивает только контейнеры. Существующие `.env` команда ниже сохраняет.
 
 ```bash
-for service in user blog comment; do
+for service in user blog comment notify; do
   [ -f "apps/$service/.env" ] || cp "apps/$service/.env.example" "apps/$service/.env"
 done
 ```
 
 npm ci --include=dev
 export JWT_SECRET="$(node -p "require('node:crypto').randomBytes(32).toString('hex')")"
-npx nx run-many -t serve -p user blog comment --inspect=false
+npx nx run-many -t serve -p user blog comment notify --parallel=4 --inspect=false
 
-Чтобы запустить все базы в Docker:
-docker compose --env-file apps/user/.env.example -f apps/user/docker-compose.yml up -d --wait && docker compose --env-file apps/blog/.env.example -f apps/blog/docker-compose.yml up -d --wait && docker compose --env-file apps/comment/.env.example -f apps/comment/docker-compose.yml up -d --wait
+Чтобы запустить базы, RabbitMQ и SMTP в Docker:
+docker compose --env-file apps/notify/.env.example -f apps/notify/docker-compose.yml up -d --wait --remove-orphans && docker compose --env-file apps/user/.env.example -f apps/user/docker-compose.yml up -d --wait && docker compose --env-file apps/blog/.env.example -f apps/blog/docker-compose.yml up -d --wait && docker compose --env-file apps/comment/.env.example -f apps/comment/docker-compose.yml up -d --wait
 
 Чтобы остановить:
-docker compose --env-file apps/user/.env.example -f apps/user/docker-compose.yml down && docker compose --env-file apps/blog/.env.example -f apps/blog/docker-compose.yml down && docker compose --env-file apps/comment/.env.example -f apps/comment/docker-compose.yml down
+docker compose --env-file apps/user/.env.example -f apps/user/docker-compose.yml down && docker compose --env-file apps/blog/.env.example -f apps/blog/docker-compose.yml down && docker compose --env-file apps/comment/.env.example -f apps/comment/docker-compose.yml down && docker compose --env-file apps/notify/.env.example -f apps/notify/docker-compose.yml down
 
 При первом запуске Postgres
 
 npx nx run blog:db-migrate
 npx nx run blog:db-fill
+
+Notify
+
+Swagger: http://localhost:3003/api/docs
+Письма: http://localhost:8080
+
+Отправить письма (токен из `apps/notify/.env`):
+curl -X POST http://localhost:3003/api/notifications/send -H "Authorization: Bearer <NOTIFY_HTTP_TOKEN>"
 
 
 # Project

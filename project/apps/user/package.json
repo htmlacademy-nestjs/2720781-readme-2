@@ -76,7 +76,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",
-    "@project/shared-core": "0.0.1"
+    "@project/shared-core": "0.0.1",
+    "@nestjs/microservices": "11.2.7"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.0",

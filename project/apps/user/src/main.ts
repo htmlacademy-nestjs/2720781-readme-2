@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
+import { RabbitPublisher, rabbitServerOptions } from '@project/shared-core';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,7 +32,12 @@ async function bootstrap() {
     SwaggerModule.createDocument(app, swaggerConfig),
   );
 
-  const port = Number(app.get(ConfigService).get('PORT') ?? 3000);
+  const config = app.get(ConfigService);
+  app.enableShutdownHooks();
+  await app.get(RabbitPublisher).ready();
+  app.connectMicroservice(rabbitServerOptions(config, 'RABBITMQ_USER_QUEUE'));
+  await app.startAllMicroservices();
+  const port = Number(config.get('PORT') ?? 3000);
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
